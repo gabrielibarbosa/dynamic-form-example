@@ -1,0 +1,10 @@
+<div class="po-row">
+  <po-divider class="po-md-12" p-label="Dynamic Form"></po-divider>
+  <p> {{ dynamicForm.value | json }}</p>
+</div>
+  <po-dynamic-form #dynamicForm p-auto-focus="name" [p-fields]="fields" [p-value]="user">
+  </po-dynamic-form>
+<div class="po-row">
+  <po-button class="po-md-3" p-label="Save" (p-click)="poNotification.success('Formulário salvo!')">
+  </po-button>
+</div>

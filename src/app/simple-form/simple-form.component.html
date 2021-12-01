@@ -1,0 +1,17 @@
+<div class="po-row">
+  <po-divider class="po-md-12" p-label="Simple Form"></po-divider>
+  <p> {{ userForm.value | json }}</p>
+</div>
+<form [formGroup]="userForm">
+    <div class="po-row">
+      <po-input class="po-lg-6" name="name" p-label="Nome" formControlName="name"></po-input>
+      <po-email  class="po-lg-6" p-label="Email" formControlName="email" p-clean> </po-email>
+    </div>
+    <div class="po-row">
+      <po-input class="po-lg-9" formControlName="address" p-clean p-icon="po-icon-pin" p-label="Address"> </po-input>
+      <po-number class="po-lg-3" formControlName="number" p-label="Number" p-clean> </po-number>
+    </div>
+    <div class="po-row">
+      <po-button class="po-md-3" p-label="Save" (p-click)="poNotification.success('Formulário salvo!')"> </po-button>
+    </div>
+</form>
