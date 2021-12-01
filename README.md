@@ -1,28 +1,116 @@
 # DynamicFormExample
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.4.
+Exemplo de utilização do componente Dynamic Form, da Biblioteca de componentes PO UI, utilizado na apresentação do TDC Future 2021.
 
-## Development server
+## Criando o projeto angular
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Criar projeto angular utilizando o asso a passo getting started po ui https://po-ui.io/guides/getting-started;
 
-## Code scaffolding
+## Criando os componentes
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+``` $ ng generate component simple-form ```
+``` $ ng generate component dynamic-form-po-ui ```
 
-## Build
+## Imports necessários
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Adicionar os imports FormsModule e ReactiveFormsModule no arquivo app.module.ts: 
+```
+imports: [
+    FormsModule,
+    ReactiveFormsModule
+]
+```
+  
+## Simple Form
 
-## Running unit tests
+simple-form.component.html
+```
+<div class="po-row">
+  <po-divider class="po-md-12" p-label="Simple Form"></po-divider>
+  <p> {{ userForm.value | json }}</p>
+</div>
+<form [formGroup]="userForm">
+    <div class="po-row">
+      <po-input class="po-lg-6" name="name" p-label="Nome" formControlName="name"></po-input>
+      <po-email  class="po-lg-6" p-label="Email" formControlName="email" p-clean> </po-email>
+    </div>
+    <div class="po-row">
+      <po-input class="po-lg-9" formControlName="address" p-clean p-icon="po-icon-pin" p-label="Address"> </po-input>
+      <po-number class="po-lg-3" formControlName="number" p-label="Number" p-clean> </po-number>
+    </div>
+    <div class="po-row">
+      <po-button class="po-md-3" p-label="Save" (p-click)="poNotification.success('Formulário salvo!')"> </po-button>
+    </div>
+</form>
+```
+simple-form.component.ts
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+``` 
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { PoNotificationService } from '@po-ui/ng-components';
 
-## Running end-to-end tests
+@Component({
+  selector: 'app-simple-form',
+  templateUrl: './simple-form.component.html',
+  styleUrls: ['./simple-form.component.css']
+})
+export class SimpleFormComponent {
+  user: Array<any> = [];
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+  userForm = this.formBuilder.group({
+    name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(30)])],
+    address: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(50)])],
+    number: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(99999)])],
+    email: ['', Validators.required]
+  });
 
-## Further help
+  constructor(
+    public formBuilder: FormBuilder,
+    public poNotification: PoNotificationService) { }
+}
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# dynamic-form-example
+```
+
+## Dynamic Form
+
+dynamic-form-po-ui.component.html
+```
+<<div class="po-row">
+  <po-divider class="po-md-12" p-label="Dynamic Form"></po-divider>
+  <p> {{ dynamicForm.value | json }}</p>
+</div>
+  <po-dynamic-form #dynamicForm p-auto-focus="name" [p-fields]="fields" [p-value]="user">
+  </po-dynamic-form>
+<div class="po-row">
+  <po-button class="po-md-3" p-label="Save" (p-click)="poNotification.success('Formulário salvo!')">
+  </po-button>
+</div>
+```
+dynamic-form-po-ui.component.ts
+
+``` 
+import { Component } from '@angular/core';
+import { PoDynamicFormField, PoNotificationService } from '@po-ui/ng-components';
+
+@Component({
+  selector: 'app-dynamic-form-po-ui',
+  templateUrl: './dynamic-form-po-ui.component.html',
+  styleUrls: ['./dynamic-form-po-ui.component.css']
+})
+export class DynamicFormPoUiComponent {
+  user = {};
+
+  fields: Array<PoDynamicFormField> = [
+    { property: 'name', required: true, minLength: 5, maxLength: 30, gridColumns: 6},
+    { property: 'email', gridColumns: 6, icon: 'po-icon-mail', required: true},
+    { property: 'address', gridColumns: 9, icon: 'po-icon-pin'},
+    { property: 'number', label: 'Number', type: 'number', gridColumns: 3, maxValue: 10000},
+  ];
+
+  constructor(public poNotification: PoNotificationService) { }
+}
+
+```
+## Agora é só rodar o projeto :D
+``` $ ng serve```
